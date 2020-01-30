@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SecondActivity extends AppCompatActivity {
 
-
+    boolean isPause = false;
     boolean isTop = true;
     boolean isBottom = false;
 
@@ -19,7 +19,7 @@ public class SecondActivity extends AppCompatActivity {
     int screenHeight;
     int screenWidth;
     private int mInterval = 10;
-    private Handler mHandler;
+    private Handler threadHandler;
     View bounceView;
     int xEdge;
     int yEdge;
@@ -29,31 +29,37 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
+
         bounceView = (View) findViewById(R.id.bounceSqView);
         screenHeight = getScreenHeight();
         screenWidth = getScreenWidth();
         xEdge = screenWidth  - 100;
         yEdge = screenHeight  - 100;
-        mHandler = new Handler();
+        threadHandler = new Handler();
 
-
-
-        float randomX = getRandomDoubleBetweenRange(0,xEdge);
+        float randomX = getRandomDoubleBetweenRange(0,xEdge - 150);
         float randomY = getRandomDoubleBetweenRange(0,yEdge - 350);
-
 
         bounceView.setX(randomX);
         bounceView.setY(randomY);
 
         startRepeatingTask();
 
-
-        System.out.println("screen width " + (xEdge));
-        System.out.println("screen height " + (yEdge));
-
+        findViewById(R.id.bounceLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPause) {
+                    isPause = false;
+                    startRepeatingTask();
+                } else {
+                    isPause = true;
+                    stopRepeatingTask();
+                }
+            }
+        });
     }
 
-    Runnable mStatusChecker = new Runnable() {
+    Runnable bounceBoxTask = new Runnable() {
         @Override
         public void run() {
             try {
@@ -84,7 +90,7 @@ public class SecondActivity extends AppCompatActivity {
                         bounceView.setX(bounceView.getX() + 5);
                         bounceView.setY(bounceView.getY() + 5);
 
-                        if (bounceView.getX() > xEdge - 100) {
+                        if (bounceView.getX() > xEdge - 150) {
                             bounceView.setX(xEdge);
                             goRight = false;
                             goLeft = true;
@@ -136,16 +142,16 @@ public class SecondActivity extends AppCompatActivity {
                 System.out.println(" square y position ==> "+bounceView.getY());
 
             } finally {
-                mHandler.postDelayed(mStatusChecker, mInterval);
+                threadHandler.postDelayed(bounceBoxTask, mInterval);
             }
         }
     };
     void startRepeatingTask() {
-        mStatusChecker.run();
+        bounceBoxTask.run();
     }
 
     void stopRepeatingTask() {
-        mHandler.removeCallbacks(mStatusChecker);
+        threadHandler.removeCallbacks(bounceBoxTask);
     }
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
