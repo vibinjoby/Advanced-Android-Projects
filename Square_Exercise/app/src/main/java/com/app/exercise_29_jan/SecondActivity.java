@@ -38,8 +38,8 @@ public class SecondActivity extends AppCompatActivity {
 
 
 
-        float randomX = 5;//getRandomDoubleBetweenRange(0,xEdge);
-        float randomY = 0;//getRandomDoubleBetweenRange(0,yEdge);
+        float randomX = getRandomDoubleBetweenRange(0,xEdge);
+        float randomY = getRandomDoubleBetweenRange(0,yEdge - 350);
 
 
         bounceView.setX(randomX);
@@ -52,6 +52,7 @@ public class SecondActivity extends AppCompatActivity {
         System.out.println("screen height " + (yEdge));
 
     }
+
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
@@ -83,7 +84,7 @@ public class SecondActivity extends AppCompatActivity {
                         bounceView.setX(bounceView.getX() + 5);
                         bounceView.setY(bounceView.getY() + 5);
 
-                        if (bounceView.getX() > xEdge) {
+                        if (bounceView.getX() > xEdge - 100) {
                             bounceView.setX(xEdge);
                             goRight = false;
                             goLeft = true;
