@@ -24,7 +24,6 @@ public class SecondActivity extends AppCompatActivity {
     int xEdge;
     int yEdge;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

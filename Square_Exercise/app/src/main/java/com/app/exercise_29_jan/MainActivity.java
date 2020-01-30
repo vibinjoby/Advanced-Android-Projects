@@ -2,9 +2,7 @@ package com.app.exercise_29_jan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.GestureDetector;
@@ -12,8 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,16 +43,13 @@ public class MainActivity extends AppCompatActivity {
                 gestureDetector.onTouchEvent(event);
                 return true;
             }
-
         });
     }
-    Runnable mStatusChecker = new Runnable() {
+    Runnable bounceBoxTask = new Runnable() {
         @Override
         public void run() {
             try {
-
                 // four coordinates
-
 
                 // -x and + y
                 if (touchX < squareView.getX() && touchY > squareView.getY()) {
@@ -109,25 +102,18 @@ public class MainActivity extends AppCompatActivity {
                     squareView.setX(squareView.getX() + 5);
                 }
             } finally {
-                mHandler.postDelayed(mStatusChecker, mInterval);
+                mHandler.postDelayed(bounceBoxTask, mInterval);
             }
         }
     };
     void startRepeatingTask() {
-        mStatusChecker.run();
+        bounceBoxTask.run();
     }
 
     void stopRepeatingTask() {
         Random rnd = new Random();
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         squareView.setBackgroundColor(color);
-        mHandler.removeCallbacks(mStatusChecker);
-    }
-    public static int getScreenWidth() {
-        return Resources.getSystem().getDisplayMetrics().widthPixels;
-    }
-
-    public static int getScreenHeight() {
-        return Resources.getSystem().getDisplayMetrics().heightPixels;
+        mHandler.removeCallbacks(bounceBoxTask);
     }
 }
