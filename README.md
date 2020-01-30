@@ -1,2 +1,2 @@
 # Advanced-Android-Projects
-![](bounce_square.gif)
+![](bounce_squares.gif)
