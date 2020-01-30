@@ -37,14 +37,18 @@ public class SecondActivity extends AppCompatActivity {
         yEdge = screenHeight  - 100;
         threadHandler = new Handler();
 
-        float randomX = getRandomDoubleBetweenRange(0,xEdge - 150);
-        float randomY = getRandomDoubleBetweenRange(0,yEdge - 350);
+        float randomX = (float)getRandomDoubleBetweenRange(xEdge - 350);
+        float randomY = (float)getRandomDoubleBetweenRange(yEdge - 350);
+
+        System.out.println(randomX);
+        System.out.println(randomY);
 
         bounceView.setX(randomX);
         bounceView.setY(randomY);
 
         startRepeatingTask();
 
+        //Pause the box from moving on tap
         findViewById(R.id.bounceLayout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +94,8 @@ public class SecondActivity extends AppCompatActivity {
                         bounceView.setX(bounceView.getX() + 5);
                         bounceView.setY(bounceView.getY() + 5);
 
-                        if (bounceView.getX() > xEdge - 150) {
-                            bounceView.setX(xEdge);
+                        if (bounceView.getX() > xEdge - 50) {
+                            bounceView.setX(xEdge - 50);
                             goRight = false;
                             goLeft = true;
                         }
@@ -122,8 +126,8 @@ public class SecondActivity extends AppCompatActivity {
                         bounceView.setX(bounceView.getX() + 5);
                         bounceView.setY(bounceView.getY() - 5);
 
-                        if (bounceView.getX() > xEdge) {
-                            bounceView.setX(xEdge);
+                        if (bounceView.getX() > xEdge - 50) {
+                            bounceView.setX(xEdge - 50);
                             goRight = false;
                             goLeft = true;
                         }
@@ -138,9 +142,6 @@ public class SecondActivity extends AppCompatActivity {
                         }
                     }
                 }
-                System.out.println(" square x position ==> "+bounceView.getX());
-                System.out.println(" square y position ==> "+bounceView.getY());
-
             } finally {
                 threadHandler.postDelayed(bounceBoxTask, mInterval);
             }
@@ -161,8 +162,9 @@ public class SecondActivity extends AppCompatActivity {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
-    public static float getRandomDoubleBetweenRange(double min, double max){
-        double x = (Math.random()*((max-min)+1))+min;
-        return (float)x;
+    public static double getRandomDoubleBetweenRange(double max){
+        double randomDouble = Math.random();
+        randomDouble = randomDouble * max + 1;
+        return randomDouble;
     }
 }
