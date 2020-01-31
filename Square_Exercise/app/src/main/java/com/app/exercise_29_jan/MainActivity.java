@@ -27,20 +27,16 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler();
 
         findViewById(R.id.mainView).setOnTouchListener(new View.OnTouchListener() {
-            private GestureDetector gestureDetector = new GestureDetector(MainActivity.this,
-                    new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onDoubleTap(MotionEvent e) {
-                    return super.onDoubleTap(e);
-                }
-            });
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 touchX = (int)event.getX();
                 touchY = (int)event.getY();
+
                 startRepeatingTask();
-                gestureDetector.onTouchEvent(event);
+
+
+
                 return true;
             }
         });
@@ -48,13 +44,14 @@ public class MainActivity extends AppCompatActivity {
     Runnable bounceBoxTask = new Runnable() {
         @Override
         public void run() {
+            int incrSteps = 5;
             try {
                 // four coordinates
 
                 // -x and + y
                 if (touchX < squareView.getX() && touchY > squareView.getY()) {
-                    squareView.setX(squareView.getX() - 5);
-                    squareView.setY(squareView.getY() + 5);
+                    squareView.setX(squareView.getX() - incrSteps);
+                    squareView.setY(squareView.getY() + incrSteps);
                     if (touchX > squareView.getX()) {
                         squareView.setX(touchX);
                         stopRepeatingTask();
@@ -62,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // x and -y
                 else if (touchX > squareView.getX() && touchY < squareView.getY()) {
-                    squareView.setX(squareView.getX() + 5);
-                    squareView.setY(squareView.getY() - 5);
+                    squareView.setX(squareView.getX() + incrSteps);
+                    squareView.setY(squareView.getY() - incrSteps);
                     if (touchX < squareView.getX()) {
                         squareView.setX(touchX);
                         stopRepeatingTask();
@@ -71,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // -x and -y
                 else if (touchX < squareView.getX() && touchY < squareView.getY()) {
-                    squareView.setX(squareView.getX() -5);
-                    squareView.setY(squareView.getY() - 5);
+                    squareView.setX(squareView.getX() -incrSteps);
+                    squareView.setY(squareView.getY() - incrSteps);
                     if (touchX > squareView.getX()) {
                         squareView.setX(touchX);
                         stopRepeatingTask();
@@ -80,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // x and y
                 else if (touchX > squareView.getX() && touchY > squareView.getY()) {
-                    squareView.setX(squareView.getX() +5);
-                    squareView.setY(squareView.getY() + 5);
+                    squareView.setX(squareView.getX() +incrSteps);
+                    squareView.setY(squareView.getY() + incrSteps);
                     if (touchX < squareView.getX()) {
                         squareView.setX(touchX);
                         stopRepeatingTask();
@@ -89,17 +86,25 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 else if (touchX == squareView.getX() && touchY < squareView.getY()) {
-                    squareView.setY(squareView.getY() - 5);
+                    squareView.setY(squareView.getY() - incrSteps);
                 }
                 else if (touchX == squareView.getX() && touchY > squareView.getY()) {
-                    squareView.setY(squareView.getY() + 5);
+                    squareView.setY(squareView.getY() + incrSteps);
                 }
 
                 else if (touchY == squareView.getY() && touchX < squareView.getX()) {
-                    squareView.setX(squareView.getX() - 5);
+                    squareView.setX(squareView.getX() - incrSteps);
                 }
                 else if (touchY == squareView.getY() && touchX > squareView.getX()) {
-                    squareView.setX(squareView.getX() + 5);
+                    squareView.setX(squareView.getX() + incrSteps);
+                }
+                if (touchY == squareView.getY() && touchX == squareView.getX()) {
+                    System.out.println("current x ==>" + squareView.getX());
+                    System.out.println("current y ==>" + squareView.getY());
+
+                    System.out.println("touch x ==> "+ touchX);
+                    System.out.println("touch y ==> "+ touchY);
+                    stopRepeatingTask();
                 }
             } finally {
                 mHandler.postDelayed(bounceBoxTask, mInterval);
